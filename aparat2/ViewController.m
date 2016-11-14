@@ -187,7 +187,28 @@
 
 -(void)Aparat:(Aparat *)aparat withNewList:(NSArray *)videos {
     
-    videosList = [videosList arrayByAddingObjectsFromArray:videos];
+    // Just those videos which we didn't have before! ( To prevent duplication )
+    NSMutableArray<VideoModel*> *newVideos = [NSMutableArray array];
+    
+    for (VideoModel* video in videos) {
+        
+        __block  BOOL found = NO;
+        
+        [videosList enumerateObjectsUsingBlock:^(VideoModel* v, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if( video.id == v.id ) {
+                *stop = YES;
+                found = YES;
+            }
+            
+        }];
+        
+        if( found == NO )
+            [newVideos addObject:video];
+        
+    }
+    
+    videosList = [videosList arrayByAddingObjectsFromArray:newVideos];
     [collection reloadData];
     
 }

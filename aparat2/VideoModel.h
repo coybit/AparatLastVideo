@@ -13,6 +13,7 @@
 
 @interface VideoModel : JSONModel
 
+@property long id;
 @property (nonatomic) NSString* title;
 @property (nonatomic) NSString* big_poster;
 @property (nonatomic) NSString* small_poster;
