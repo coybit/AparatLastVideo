@@ -107,7 +107,7 @@
     
     VideoModel* video = (VideoModel*)videosList[indexPath.row];
     cell.lblTitle.text = video.title;
-    [cell.imgViewPoster setImageWithURL:[NSURL URLWithString:video.smallPoster] placeholder:nil];
+    [cell.imgViewPoster setImageWithURL:[NSURL URLWithString:video.small_poster] placeholder:nil];
 
     return cell;
 }

@@ -7,4 +7,5 @@ target 'aparat2' do
 
   # Pods for aparat2
   pod 'JMImageCache'
+  pod 'JSONModel'
 end

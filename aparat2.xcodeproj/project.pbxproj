@@ -19,6 +19,7 @@
 		85867A1F1DD9C08B00BEE60C /* LargeCollectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 85867A1E1DD9C08B00BEE60C /* LargeCollectionLayout.m */; };
 		85867A221DD9C0D600BEE60C /* VideoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85867A211DD9C0D600BEE60C /* VideoCollectionViewCell.m */; };
 		85867A2D1DD9D90F00BEE60C /* NeatLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85867A2C1DD9D90F00BEE60C /* NeatLabel.m */; };
+		85867A301DD9DD7300BEE60C /* LastVideosResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 85867A2F1DD9DD7300BEE60C /* LastVideosResponse.m */; };
 		F1F99BB4462614FE7198E128 /* libPods-aparat2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97C8E32A1073D28BC9FFD390 /* libPods-aparat2.a */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +38,7 @@
 		85867A131DD997B500BEE60C /* Aparat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aparat.m; sourceTree = "<group>"; };
 		85867A151DD99B9800BEE60C /* VideoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoModel.h; sourceTree = "<group>"; };
 		85867A161DD99B9900BEE60C /* VideoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoModel.m; sourceTree = "<group>"; };
-		85867A181DD9AE8B00BEE60C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		85867A181DD9AE8B00BEE60C /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		85867A1A1DD9BED000BEE60C /* CompactCollectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactCollectionLayout.h; sourceTree = "<group>"; };
 		85867A1B1DD9BED000BEE60C /* CompactCollectionLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactCollectionLayout.m; sourceTree = "<group>"; };
 		85867A1D1DD9C08B00BEE60C /* LargeCollectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LargeCollectionLayout.h; sourceTree = "<group>"; };
@@ -46,6 +47,8 @@
 		85867A211DD9C0D600BEE60C /* VideoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCollectionViewCell.m; sourceTree = "<group>"; };
 		85867A2B1DD9D90F00BEE60C /* NeatLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeatLabel.h; sourceTree = "<group>"; };
 		85867A2C1DD9D90F00BEE60C /* NeatLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NeatLabel.m; sourceTree = "<group>"; };
+		85867A2E1DD9DD7300BEE60C /* LastVideosResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastVideosResponse.h; sourceTree = "<group>"; };
+		85867A2F1DD9DD7300BEE60C /* LastVideosResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastVideosResponse.m; sourceTree = "<group>"; };
 		97C8E32A1073D28BC9FFD390 /* libPods-aparat2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aparat2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4CC089CD83B9234F79889EF /* Pods-aparat2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aparat2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-aparat2/Pods-aparat2.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +135,8 @@
 			children = (
 				85867A151DD99B9800BEE60C /* VideoModel.h */,
 				85867A161DD99B9900BEE60C /* VideoModel.m */,
+				85867A2E1DD9DD7300BEE60C /* LastVideosResponse.h */,
+				85867A2F1DD9DD7300BEE60C /* LastVideosResponse.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85867A301DD9DD7300BEE60C /* LastVideosResponse.m in Sources */,
 				85867A141DD997B500BEE60C /* Aparat.m in Sources */,
 				85867A171DD99B9900BEE60C /* VideoModel.m in Sources */,
 				85867A221DD9C0D600BEE60C /* VideoCollectionViewCell.m in Sources */,

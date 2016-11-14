@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <JSONModel.h>
 
-@interface VideoModel : NSObject
+@protocol VideoModel;
 
-@property (strong,nonatomic) NSString* title;
-@property (strong,nonatomic) NSString* bigPoster;
-@property (strong,nonatomic) NSString* smallPoster;
+@interface VideoModel : JSONModel
+
+@property (nonatomic) NSString* title;
+@property (nonatomic) NSString* big_poster;
+@property (nonatomic) NSString* small_poster;
+
 @end
