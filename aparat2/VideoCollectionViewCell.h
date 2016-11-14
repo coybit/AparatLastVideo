@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NeatLabel.h"
 
 @interface VideoCollectionViewCell : UICollectionViewCell
 
-@property BOOL compactMode;
-@property (nonatomic,strong) UILabel* lblTitle;
+@property (nonatomic,strong) NeatLabel* lblTitle;
 @property (nonatomic,strong) UIImageView* imgViewPoster;
 
 @end

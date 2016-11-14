@@ -16,14 +16,12 @@
     
     if( self ) {
         
-        float width = frame.size.width;
-
-        self.compactMode = YES;
-        
-        self.imgViewPoster = [[UIImageView alloc] initWithFrame:CGRectMake(width-100, 0, 100, 100)];
+        self.imgViewPoster = [[UIImageView alloc] initWithFrame:CGRectZero];
+        self.imgViewPoster.contentMode = UIViewContentModeScaleAspectFill;
+        self.imgViewPoster.clipsToBounds = YES;
         [self.contentView addSubview:self.imgViewPoster];
         
-        self.lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width-100, 100)];
+        self.lblTitle = [[NeatLabel alloc] initWithFrame:CGRectZero];
         self.lblTitle.numberOfLines = 0;
         self.lblTitle.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:self.lblTitle];
@@ -40,17 +38,27 @@
 
 - (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes {
  
-    float width = self.frame.size.width;
-    float height = self.frame.size.height;
+    float cellWidth = self.frame.size.width;
+    float cellHeight = self.frame.size.height;
     
-    if( layoutAttributes.frame.size.height == 100 )
+    CGSize imageSize;
+    CGSize labelSize;
+    
+    if( layoutAttributes.frame.size.height == 100 ) // isCompact
     {
-        self.imgViewPoster.frame = CGRectMake(width-100, 0, 100, 100);
-        self.lblTitle.frame = CGRectMake(0, 0, width-100, 100);
+        imageSize = CGSizeMake(100, cellHeight);
+        labelSize = CGSizeMake(cellWidth-100, cellHeight);
+        
+        self.lblTitle.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
+        self.imgViewPoster.frame = CGRectMake(cellWidth-imageSize.width, 0, imageSize.width, imageSize.height);
+        
     }
-    else{
-        self.imgViewPoster.frame = CGRectMake(0, 0, width, height/2);
-        self.lblTitle.frame = CGRectMake(0, height/2, width, height/2);
+    else{ // is Large mode
+        imageSize = CGSizeMake(cellWidth, 0.75 * cellHeight);
+        labelSize = CGSizeMake(cellWidth, 0.25 * cellHeight);
+        
+        self.imgViewPoster.frame = CGRectMake(0, 0, imageSize.width, imageSize.height);
+        self.lblTitle.frame = CGRectMake(0, imageSize.height, labelSize.width, labelSize.height);
     }
     
 }

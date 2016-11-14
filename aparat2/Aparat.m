@@ -13,7 +13,19 @@
     NSMutableArray* lastFetchVideos;
 }
 
-- (void)fetchLastVides {
+- (instancetype)initWithDelegate:(id<AparatDelegate>)delegate {
+    
+    self = [super init];
+    
+    if( self ){
+        self.delegate = delegate;
+        [self fetchLastVideos];
+    }
+    
+    return  self;
+}
+
+- (void)fetchLastVideos {
     
     NSError *error;
     
@@ -23,17 +35,8 @@
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:60.0];
-    
-    //[request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    //[request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
     [request setHTTPMethod:@"GET"];
-    //NSDictionary *mapData = [[NSDictionary alloc] initWithObjectsAndKeys: @"TEST IOS", @"name",
-                             //@"IOS TYPE", @"typemap",
-                             //nil];
-    //NSData *postData = [NSJSONSerialization dataWithJSONObject:mapData options:0 error:&error];
-    //[request setHTTPBody:postData];
-    
+
     
     NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
@@ -67,10 +70,5 @@
     
 }
 
-- (void)fetch {
-    
-    [self fetchLastVides];
-    
-}
 
 @end

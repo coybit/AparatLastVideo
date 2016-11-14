@@ -27,21 +27,20 @@
     NSArray* videosList;
     CompactCollectionLayout* compactLayout;
     LargeCollectionLayout* largeLayout;
+    BOOL isCompact;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-    videosList = [NSArray array];
-    aparat = [[Aparat alloc] init];
-    aparat.delegate = self;
-    [aparat fetch];
 
+    videosList = [NSArray array];
+    isCompact = YES;
     
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height;
     
+    // Creating a button
     btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 50, 30)];
     [btnChangeLayout setTitle:@"Layout" forState:UIControlStateNormal];
     [btnChangeLayout setTintColor:[UIColor blackColor]];
@@ -61,6 +60,9 @@
     [self.view addSubview:collection];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    
+    aparat = [[Aparat alloc] initWithDelegate:self];
 }
 
 
@@ -79,7 +81,6 @@
     btnChangeLayout.frame = CGRectMake(10, 20, 70, 30);
 }
 
-BOOL isCompact = YES;
 
 - (void)changeLayoutDidTouch:(id)sender {
     
@@ -93,6 +94,9 @@ BOOL isCompact = YES;
     isCompact = !isCompact;
 }
 
+
+#pragma mark CollectionView Delegate and Datasource
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return videosList.count;
 }
@@ -102,10 +106,9 @@ BOOL isCompact = YES;
     VideoCollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VideoCellID" forIndexPath:indexPath];
     
     VideoModel* video = (VideoModel*)videosList[indexPath.row];
-
     cell.lblTitle.text = video.title;
     [cell.imgViewPoster setImageWithURL:[NSURL URLWithString:video.smallPoster] placeholder:nil];
-    cell.compactMode = isCompact;
+
     return cell;
 }
 
@@ -114,6 +117,9 @@ BOOL isCompact = YES;
     return UIEdgeInsetsMake(5, 5, 5, 5);
     
 }
+
+
+#pragma mark Aparat Service Delegate
 
 -(void)Aparat:(Aparat *)aparat withNewList:(NSArray *)videos {
     

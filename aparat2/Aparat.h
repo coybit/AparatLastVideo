@@ -12,16 +12,13 @@
 @class Aparat;
 
 @protocol AparatDelegate <NSObject>
-
 - (void)Aparat:(Aparat*)aparat withNewList:(NSArray*)videos;
-
 @end
 
 @interface Aparat : NSObject <NSURLSessionTaskDelegate>
 
 @property (weak,nonatomic) id<AparatDelegate> delegate;
 
-- (void)fetch;
-
+- (instancetype)initWithDelegate:(id<AparatDelegate>)delegate;
 
 @end
