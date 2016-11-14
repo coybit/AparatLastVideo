@@ -31,6 +31,7 @@
     UILabel* viewLoading;
     UIAlertController* alertVC;
     BOOL isConnected;
+    dispatch_queue_t serialQueue;
 }
 
 - (void)viewDidLoad {
@@ -39,6 +40,8 @@
 
     videosList = [NSArray array];
     isCompact = YES;
+    
+    serialQueue =  dispatch_queue_create("com.aparat.serial.queue", DISPATCH_QUEUE_SERIAL);
     
     // Creating a button
     btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -187,29 +190,37 @@
 
 -(void)Aparat:(Aparat *)aparat withNewList:(NSArray *)videos {
     
-    // Just those videos which we didn't have before! ( To prevent duplication )
-    NSMutableArray<VideoModel*> *newVideos = [NSMutableArray array];
+    // Running duplication remover on a serial queue to allow just one writer at any time in this section
+    dispatch_async(serialQueue, ^{
     
-    for (VideoModel* video in videos) {
+        // Just those videos which we didn't have before! ( To prevent duplication )
+        NSMutableArray<VideoModel*> *newVideos = [NSMutableArray array];
         
-        __block  BOOL found = NO;
-        
-        [videosList enumerateObjectsUsingBlock:^(VideoModel* v, NSUInteger idx, BOOL * _Nonnull stop) {
+        for (VideoModel* video in videos) {
             
-            if( video.id == v.id ) {
-                *stop = YES;
-                found = YES;
-            }
+            __block  BOOL found = NO;
             
-        }];
+            [videosList enumerateObjectsUsingBlock:^(VideoModel* v, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                if( video.id == v.id ) {
+                    *stop = YES;
+                    found = YES;
+                }
+                
+            }];
+            
+            if( found == NO )
+                [newVideos addObject:video];
+            
+        }
         
-        if( found == NO )
-            [newVideos addObject:video];
+        videosList = [videosList arrayByAddingObjectsFromArray:newVideos];
         
-    }
-    
-    videosList = [videosList arrayByAddingObjectsFromArray:newVideos];
-    [collection reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [collection reloadData];
+        });
+        
+    });
     
 }
 
