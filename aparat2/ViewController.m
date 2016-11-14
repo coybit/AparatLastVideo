@@ -172,6 +172,7 @@
     VideoModel* video = (VideoModel*)videosList[indexPath.row];
     cell.videoModel = video;
     
+    
     return cell;
 }
 
@@ -213,9 +214,15 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    if( scrollView.contentOffset.y > 0) // Just when scroll gets to the end of list
-        [aparat fetchMoreLastVideos];
+    float scrollViewHeight = scrollView.frame.size.height;
+    float scrollContentSizeHeight = scrollView.contentSize.height;
+    float scrollOffset = scrollView.contentOffset.y;
     
+    if (scrollOffset + scrollViewHeight == scrollContentSizeHeight)
+    {
+        //This condition will be true when scrollview will reach to bottom
+        [aparat fetchMoreLastVideos];
+    }
 }
 
 
