@@ -10,21 +10,23 @@
 #import "Aparat.h"
 #import <JMImageCache.h>
 #import <UIImageView+JMImageCache.h>
+#import "VideoCollectionViewCell.h"
+#import "CompactCollectionLayout.h"
+#import "LargeCollectionLayout.h"
 
 
 @interface ViewController  ()
 @end
 
-@interface VideoCell : UICollectionViewCell
-@end
-@implementation VideoCell
-@end
 
 @implementation ViewController
 {
     UICollectionView* collection;
+    UIButton* btnChangeLayout;
     Aparat* aparat;
     NSArray* videosList;
+    CompactCollectionLayout* compactLayout;
+    LargeCollectionLayout* largeLayout;
 }
 
 - (void)viewDidLoad {
@@ -37,16 +39,28 @@
     [aparat fetch];
 
     
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    collection = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+    int width = self.view.frame.size.width;
+    int height = self.view.frame.size.height;
+    
+    btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 50, 30)];
+    [btnChangeLayout setTitle:@"Layout" forState:UIControlStateNormal];
+    [btnChangeLayout setTintColor:[UIColor blackColor]];
+    [btnChangeLayout setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btnChangeLayout addTarget:self action:@selector(changeLayoutDidTouch:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnChangeLayout];
+
+    // Configuration of Collection View
+    compactLayout = [[CompactCollectionLayout alloc] init];
+    largeLayout = [[LargeCollectionLayout alloc] init];
+
+    collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 16, width, height-16) collectionViewLayout:compactLayout];
     collection.delegate = self;
     collection.dataSource = self;
-    [collection registerClass:[VideoCell class] forCellWithReuseIdentifier:@"VideoCellID"];
-    
+    collection.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
+    [collection registerClass:[VideoCollectionViewCell class] forCellWithReuseIdentifier:@"VideoCellID"];
     [self.view addSubview:collection];
     
-    [self.view setBackgroundColor:[UIColor redColor]];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
 }
 
 
@@ -57,25 +71,26 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    collection.frame = self.view.bounds;
+    int width = self.view.frame.size.width;
+    int height = self.view.frame.size.height;
+    int topBar = 60;
     
+    collection.frame = CGRectMake(0, topBar, width, height-topBar);
+    btnChangeLayout.frame = CGRectMake(10, 20, 70, 30);
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return  CGSizeMake( self.view.frame.size.width , 100);
-    
-}
+BOOL isCompact = YES;
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+- (void)changeLayoutDidTouch:(id)sender {
     
-    return  4;
+    [UIView animateWithDuration:0.3 animations:^{
+       
+        [collection.collectionViewLayout invalidateLayout];
+        [collection setCollectionViewLayout:isCompact?largeLayout:compactLayout animated:YES];
+        
+    }];
     
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
- 
-    return  4;
+    isCompact = !isCompact;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -84,35 +99,21 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VideoCellID" forIndexPath:indexPath];
+    VideoCollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VideoCellID" forIndexPath:indexPath];
     
-    CGRect frame;
     VideoModel* video = (VideoModel*)videosList[indexPath.row];
-    
-    
-    float width = self.view.frame.size.width;
-    
-    
-    UIImage* img;
-    UIImageView* imgView = [[UIImageView alloc] initWithImage:img];
-    imgView.frame = CGRectMake(width-100, 0, 100, 100);
-    imgView.tag = 1001;
-    [cell.contentView addSubview:imgView];
-    
-    UILabel* lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width-100, 100)];
-    lblTitle.text =  video.title;
-    lblTitle.tag = 1002;
-    lblTitle.backgroundColor = [UIColor whiteColor];
-    [cell.contentView addSubview:lblTitle];
-    
-    [imgView setImageWithURL:[NSURL URLWithString:video.smallPoster] placeholder:nil];
-    
-    
-    cell.backgroundColor = [UIColor grayColor];
-    
+
+    cell.lblTitle.text = video.title;
+    [cell.imgViewPoster setImageWithURL:[NSURL URLWithString:video.smallPoster] placeholder:nil];
+    cell.compactMode = isCompact;
     return cell;
 }
 
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    
+    return UIEdgeInsetsMake(5, 5, 5, 5);
+    
+}
 
 -(void)Aparat:(Aparat *)aparat withNewList:(NSArray *)videos {
     
