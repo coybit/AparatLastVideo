@@ -20,5 +20,6 @@
 @property (weak,nonatomic) id<AparatDelegate> delegate;
 
 - (instancetype)initWithDelegate:(id<AparatDelegate>)delegate;
+- (void)fetchMoreLastVideos;
 
 @end

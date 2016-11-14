@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Aparat.h"
 
-@interface ViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource,AparatDelegate,UICollectionViewDelegateFlowLayout>
+@interface ViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource,AparatDelegate,UICollectionViewDelegateFlowLayout,UIScrollViewDelegate>
 
 
 @end

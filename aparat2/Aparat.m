@@ -7,12 +7,13 @@
 //
 
 #import "Aparat.h"
-#import "LastVideosResponse.h"
+#import "ResponseModels.h"
 
 @implementation Aparat
 {
     NSMutableArray* lastFetchVideos;
     NSString* apiLastVideo;
+    NSString* nextPageLink;
 }
 
 - (instancetype)initWithDelegate:(id<AparatDelegate>)delegate {
@@ -24,17 +25,25 @@
         apiLastVideo = @"http://www.aparat.com/etc/api/lastvideos";
         
         self.delegate = delegate;
-        [self fetchLastVideos];
+        [self fetchLastVideosForFirstTime];
     }
     
     return  self;
 }
 
-- (void)fetchLastVideos {
+- (void)fetchLastVideosForFirstTime {
+    [self fetchLastVideosOnURL:apiLastVideo];
+}
+
+- (void)fetchMoreLastVideos {
+    [self fetchLastVideosOnURL:nextPageLink];
+}
+
+- (void)fetchLastVideosOnURL:(NSString*)strURL {
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
-    NSURL *url = [NSURL URLWithString:apiLastVideo];
+    NSURL *url = [NSURL URLWithString:strURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy  timeoutInterval:60.0];
     [request setHTTPMethod:@"GET"];
 
@@ -45,6 +54,9 @@
         NSString* json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         LastVideosResponse* res = [[LastVideosResponse alloc] initWithString:json error:nil];
 
+        nextPageLink = res.ui.pagingForward;
+        //nextPageLink = ((NSDictionary*)res.ui)[@"pagingForward"];
+        
         // Notifying about new data
         dispatch_async(dispatch_get_main_queue(), ^{
            
@@ -57,6 +69,8 @@
     [postDataTask resume];
     
 }
+
+
 
 
 @end

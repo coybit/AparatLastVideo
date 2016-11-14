@@ -122,9 +122,25 @@
 
 -(void)Aparat:(Aparat *)aparat withNewList:(NSArray *)videos {
     
-    videosList = videos;
+    videosList = [videosList arrayByAddingObjectsFromArray:videos];
     [collection reloadData];
     
 }
+
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    [aparat fetchMoreLastVideos];
+    
+}
+
 
 @end

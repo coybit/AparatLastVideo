@@ -6,8 +6,10 @@
 //  Copyright © 2016 Marblzz. All rights reserved.
 //
 
-#import "LastVideosResponse.h"
+#import "ResponseModels.h"
+
+@implementation SequentialLinksModel
+@end
 
 @implementation LastVideosResponse
-
 @end
