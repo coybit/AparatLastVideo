@@ -28,6 +28,7 @@
     CompactCollectionLayout* compactLayout;
     LargeCollectionLayout* largeLayout;
     BOOL isCompact;
+    UILabel* viewLoading;
 }
 
 - (void)viewDidLoad {
@@ -41,7 +42,7 @@
     int height = self.view.frame.size.height;
     
     // Creating a button
-    btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, 50, 30)];
+    btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectZero];
     [btnChangeLayout setTitle:@"Layout" forState:UIControlStateNormal];
     [btnChangeLayout setTintColor:[UIColor blackColor]];
     [btnChangeLayout setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -52,12 +53,30 @@
     compactLayout = [[CompactCollectionLayout alloc] init];
     largeLayout = [[LargeCollectionLayout alloc] init];
 
-    collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 16, width, height-16) collectionViewLayout:compactLayout];
+    collection = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:compactLayout];
     collection.delegate = self;
     collection.dataSource = self;
+    [collection setAutoresizingMask:
+     UIViewAutoresizingFlexibleLeftMargin|
+     UIViewAutoresizingFlexibleRightMargin|
+     UIViewAutoresizingFlexibleTopMargin|
+     UIViewAutoresizingFlexibleBottomMargin|
+     UIViewAutoresizingFlexibleWidth|
+     UIViewAutoresizingFlexibleHeight];
     collection.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1];
     [collection registerClass:[VideoCollectionViewCell class] forCellWithReuseIdentifier:@"VideoCellID"];
     [self.view addSubview:collection];
+    
+    // Creating Loading View
+    viewLoading = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 100)];
+    viewLoading.center = self.view.center;
+    viewLoading.text = @"Please Wait...";
+    viewLoading.textColor = [UIColor whiteColor];
+    viewLoading.textAlignment = NSTextAlignmentCenter;
+    viewLoading.backgroundColor = [UIColor grayColor];
+    viewLoading.layer.cornerRadius = 8;
+    viewLoading.clipsToBounds = YES;
+    
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
@@ -71,14 +90,17 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
     
     int width = self.view.frame.size.width;
     int height = self.view.frame.size.height;
-    int topBar = 60;
+    int topBar = 70;
     
     collection.frame = CGRectMake(0, topBar, width, height-topBar);
-    btnChangeLayout.frame = CGRectMake(10, 20, 70, 30);
+    btnChangeLayout.frame = CGRectMake(10, 16, 70, 30);
+    
+    [collection.collectionViewLayout invalidateLayout];
 }
 
 
@@ -127,14 +149,25 @@
     
 }
 
+-(void)AparatWillFetchNewData:(Aparat *)aparat {
+    viewLoading.alpha = 0;
+    [self.view addSubview:viewLoading];
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    
+    [UIView animateWithDuration:0.1 animations:^{
+        viewLoading.alpha = 1;
+    }];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    
+- (void)AparatDidFetchNewData:(Aparat *)aparat {
+    [UIView animateWithDuration:0.1 animations:^{
+        viewLoading.alpha = 0;
+    }];
+    [viewLoading removeFromSuperview];
 }
+
+
+
+#pragma mark ScrollView Delegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     

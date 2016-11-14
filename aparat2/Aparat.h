@@ -12,6 +12,8 @@
 @class Aparat;
 
 @protocol AparatDelegate <NSObject>
+- (void)AparatWillFetchNewData:(Aparat*)aparat;
+- (void)AparatDidFetchNewData:(Aparat*)aparat;
 - (void)Aparat:(Aparat*)aparat withNewList:(NSArray*)videos;
 @end
 

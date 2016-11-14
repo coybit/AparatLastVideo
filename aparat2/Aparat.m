@@ -41,6 +41,8 @@
 
 - (void)fetchLastVideosOnURL:(NSString*)strURL {
     
+    [self.delegate AparatWillFetchNewData:self];
+    
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
     NSURL *url = [NSURL URLWithString:strURL];
@@ -60,6 +62,7 @@
         // Notifying about new data
         dispatch_async(dispatch_get_main_queue(), ^{
            
+            [self.delegate AparatDidFetchNewData:self];
             [self.delegate Aparat:self withNewList:res.lastvideos];
             
         });
