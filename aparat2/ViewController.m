@@ -96,6 +96,8 @@
     collection.frame = CGRectMake(0, topBar, width, height-topBar);
     btnChangeLayout.frame = CGRectMake(10, 16, 70, 30);
     
+    viewLoading.center = self.view.center;
+    
     [collection.collectionViewLayout invalidateLayout];
 }
 
