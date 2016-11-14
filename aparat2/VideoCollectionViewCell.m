@@ -7,8 +7,16 @@
 //
 
 #import "VideoCollectionViewCell.h"
+#import <JMImageCache.h>
+#import <UIImageView+JMImageCache.h>
 
 @implementation VideoCollectionViewCell
+{
+    NeatLabel* lblTitle;
+    UIImageView* imgViewPoster;
+    VideoModel* mVideoModel;
+    BOOL isCompact;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     
@@ -16,15 +24,15 @@
     
     if( self ) {
         
-        self.imgViewPoster = [[UIImageView alloc] initWithFrame:CGRectZero];
-        self.imgViewPoster.contentMode = UIViewContentModeScaleAspectFill;
-        self.imgViewPoster.clipsToBounds = YES;
-        [self.contentView addSubview:self.imgViewPoster];
+        imgViewPoster = [[UIImageView alloc] initWithFrame:CGRectZero];
+        imgViewPoster.contentMode = UIViewContentModeScaleAspectFill;
+        imgViewPoster.clipsToBounds = YES;
+        [self.contentView addSubview:imgViewPoster];
         
-        self.lblTitle = [[NeatLabel alloc] initWithFrame:CGRectZero];
-        self.lblTitle.numberOfLines = 0;
-        self.lblTitle.textAlignment = NSTextAlignmentRight;
-        [self.contentView addSubview:self.lblTitle];
+        lblTitle = [[NeatLabel alloc] initWithFrame:CGRectZero];
+        lblTitle.numberOfLines = 0;
+        lblTitle.textAlignment = NSTextAlignmentRight;
+        [self.contentView addSubview:lblTitle];
         
         self.contentView.layer.cornerRadius = 8;
         self.contentView.clipsToBounds = YES;
@@ -46,22 +54,52 @@
     
     if( layoutAttributes.frame.size.height == 100 ) // isCompact
     {
+        isCompact = YES;
+        
         imageSize = CGSizeMake(100, cellHeight);
         labelSize = CGSizeMake(cellWidth-100, cellHeight);
         
-        self.lblTitle.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
-        self.imgViewPoster.frame = CGRectMake(cellWidth-imageSize.width, 0, imageSize.width, imageSize.height);
+        lblTitle.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
+        imgViewPoster.frame = CGRectMake(cellWidth-imageSize.width, 0, imageSize.width, imageSize.height);
         
     }
     else{ // is Large mode
+        
+        isCompact = NO;
+        
         imageSize = CGSizeMake(cellWidth, 0.75 * cellHeight);
         labelSize = CGSizeMake(cellWidth, 0.25 * cellHeight);
         
-        self.imgViewPoster.frame = CGRectMake(0, 0, imageSize.width, imageSize.height);
-        self.lblTitle.frame = CGRectMake(0, imageSize.height, labelSize.width, labelSize.height);
+        imgViewPoster.frame = CGRectMake(0, 0, imageSize.width, imageSize.height);
+        lblTitle.frame = CGRectMake(0, imageSize.height, labelSize.width, labelSize.height);
     }
+    
+    [self fillWithVideoModel];
+}
+
+- (void)setVideoModel:(VideoModel *)videoModel {
+    
+    mVideoModel = videoModel;
+    [self fillWithVideoModel];
     
 }
 
+- (VideoModel*)videoModel {
+    return mVideoModel;
+}
+
+
+- (void)fillWithVideoModel {
+    
+    lblTitle.text = mVideoModel.title;
+    
+    if( isCompact ) {
+        [imgViewPoster setImageWithURL:[NSURL URLWithString:mVideoModel.small_poster] placeholder:nil];
+    }
+    else {
+        [imgViewPoster setImageWithURL:[NSURL URLWithString:mVideoModel.big_poster] placeholder:nil];
+    }
+    
+}
 
 @end

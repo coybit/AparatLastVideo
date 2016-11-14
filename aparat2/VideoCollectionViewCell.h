@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "NeatLabel.h"
+#import "VideoModel.h"
 
 @interface VideoCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic,strong) NeatLabel* lblTitle;
-@property (nonatomic,strong) UIImageView* imgViewPoster;
+@property (nonatomic,strong) VideoModel* videoModel;
 
 @end

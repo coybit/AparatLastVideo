@@ -106,9 +106,8 @@
     VideoCollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VideoCellID" forIndexPath:indexPath];
     
     VideoModel* video = (VideoModel*)videosList[indexPath.row];
-    cell.lblTitle.text = video.title;
-    [cell.imgViewPoster setImageWithURL:[NSURL URLWithString:video.small_poster] placeholder:nil];
-
+    cell.videoModel = video;
+    
     return cell;
 }
 
