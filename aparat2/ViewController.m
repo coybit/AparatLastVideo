@@ -171,7 +171,8 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     
-    [aparat fetchMoreLastVideos];
+    if( scrollView.contentOffset.y > 0) // Just when scroll gets to the end of list
+        [aparat fetchMoreLastVideos];
     
 }
 

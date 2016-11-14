@@ -44,21 +44,19 @@
     [self.delegate AparatWillFetchNewData:self];
     
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
     NSURL *url = [NSURL URLWithString:strURL];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy  timeoutInterval:60.0];
     [request setHTTPMethod:@"GET"];
-
     
-    NSURLSessionDataTask *postDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *getDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
         // Mapping the reponse
         NSString* json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         LastVideosResponse* res = [[LastVideosResponse alloc] initWithString:json error:nil];
 
         nextPageLink = res.ui.pagingForward;
-        //nextPageLink = ((NSDictionary*)res.ui)[@"pagingForward"];
-        
+
         // Notifying about new data
         dispatch_async(dispatch_get_main_queue(), ^{
            
@@ -69,11 +67,8 @@
         
     }];
     
-    [postDataTask resume];
+    [getDataTask resume];
     
 }
-
-
-
 
 @end
