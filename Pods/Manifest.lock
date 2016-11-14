@@ -1,15 +1,18 @@
 PODS:
   - JMImageCache (0.4.0)
   - JSONModel (0.10.0)
+  - Reachability (3.1.1)
 
 DEPENDENCIES:
   - JMImageCache
   - JSONModel
+  - Reachability
 
 SPEC CHECKSUMS:
   JMImageCache: 4d764ca5819ce5b0b3bb1efb85c29977768c54bd
   JSONModel: cecca3c3a9ee1a248b56f7139e2d64b85ce536ec
+  Reachability: be4883bb93f31e38266ae3365e5600a317aae735
 
-PODFILE CHECKSUM: d9d5b3dd6b3bb38a5d39c24faaefafab64713637
+PODFILE CHECKSUM: 99884b695f2fffb7206a939c916f0be68671e645
 
 COCOAPODS: 1.0.1

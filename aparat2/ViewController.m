@@ -13,7 +13,7 @@
 #import "VideoCollectionViewCell.h"
 #import "CompactCollectionLayout.h"
 #import "LargeCollectionLayout.h"
-
+#import <Reachability.h>
 
 @interface ViewController  ()
 @end
@@ -29,6 +29,8 @@
     LargeCollectionLayout* largeLayout;
     BOOL isCompact;
     UILabel* viewLoading;
+    UIAlertController* alertVC;
+    BOOL isConnected;
 }
 
 - (void)viewDidLoad {
@@ -37,9 +39,6 @@
 
     videosList = [NSArray array];
     isCompact = YES;
-    
-    int width = self.view.frame.size.width;
-    int height = self.view.frame.size.height;
     
     // Creating a button
     btnChangeLayout = [[UIButton alloc] initWithFrame:CGRectZero];
@@ -77,13 +76,10 @@
     viewLoading.layer.cornerRadius = 8;
     viewLoading.clipsToBounds = YES;
     
-    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    
-    aparat = [[Aparat alloc] initWithDelegate:self];
+    [self startCheckingNetworkConncetion];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -103,6 +99,50 @@
     [collection.collectionViewLayout invalidateLayout];
 }
 
+- (void)startCheckingNetworkConncetion {
+    
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.aparat.com"];
+    
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            isConnected = YES;
+            [self setupAparatService];
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            isConnected = NO;
+            [self alertForNetworkDisconnecting];
+        });
+    };
+    
+    [reach startNotifier];
+}
+
+
+- (void)alertForNetworkDisconnecting {
+    
+    alertVC = [UIAlertController alertControllerWithTitle:@"Error" message:@"No Internet connection!" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* retryAction = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        if( isConnected == NO )
+            [self alertForNetworkDisconnecting];
+        
+    }];
+    
+    [alertVC addAction:retryAction];
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)setupAparatService {
+    videosList = [NSArray array];
+    aparat = [[Aparat alloc] initWithDelegate:self];
+    [collection reloadData];
+}
 
 - (void)changeLayoutDidTouch:(id)sender {
     
